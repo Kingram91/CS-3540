@@ -119,3 +119,123 @@ void delete_account (bankaccount* a)
       free(a);
     }
 }
+
+
+
+ HEADER FILE
+ 
+ /*
+ Kquane Ingram
+ Date: 9/12/14
+ */
+
+#ifndef _BANKACCOUNT_H
+#define _BANKACCOUNT_H
+
+typedef struct
+{
+    char* owner;
+    char* accountNumber;
+    double balance;
+} bankaccount;
+
+/***********************************************************
+ preconditions:
+ name cannot be null and has at least 1 character
+ accountNum cannot be null and has at least 1 character, 
+ all characters are digits
+ balance must be positive
+ 
+ return NULL is any precondition is not met
+************************************************************/
+bankaccount* create_account (char* ownerName, char* accountNum,
+                             double balance);
+
+/***********************************************************
+ preconditions:
+ bank_account cannot be null
+ 
+ nothing happens if a is NULL
+**********************************************************/
+void display_account (bankaccount* a);
+
+
+/***********************************************************
+ preconditions:
+ bank_account cannot be null
+ postcondition:
+ depositAmount has been added to balance
+ 
+ returns 0 if inout is not valid
+***********************************************************/
+int deposit (bankaccount* a, double depositAmount);
+
+
+/***********************************************************
+ Preconditions:
+ bank_account cannot be null
+ 
+ postconditions:
+ withdrawAmount has been subtracted from balance
+ 
+ returns 0 if input is not valid
+************************************************************/
+int withdraw (bankaccount* a, double withdrawAmount);
+
+
+/***********************************************************
+ preconditions:
+ bank_account cannot be null
+ Postcondition:
+ all memory allocated to the bank account has to be deallocated
+ 
+ nothing happens a is NULL
+************************************************************/
+void  delete_account (bankaccount* a);
+
+#endif
+
+
+
+TESTFILE
+
+/*
+ Kquane Ingram
+ Date: 9/14/14
+*/
+
+#include "bankaccount.h"
+#include <stdio.h>
+
+int main()
+{
+    bankaccount* a1 = create_account("Mr Ingram", "383880", 10050.35);
+    printf("\n"); //print new line
+    display_account (a1);
+    withdraw (a1, 550.50);
+    deposit (a1, 790.00);
+    display_account (a1);
+    delete_account (a1);
+    printf("\n"); //print new line
+    
+    bankaccount* a3 = create_account("John Doe", "325201", 5.76);
+    display_account (a3);
+    withdraw (a3, -10.00);
+    deposit (a3, 199.45);
+    delete_account (a3);
+    printf("\n") //print new line
+    
+    bankaccount* a4 = create_account("Megan Good", "123456", 3415.23);
+    display_account(a4);
+    withdraw (a4, 423.10);
+    deposit (a4, -343.50);
+    delete_account (a4);
+    printf("\n"); //print new line
+    
+    bankaccount* a2 = create_account("Ben Frank", "1790", -100);
+    
+    display_account(a2);
+    delete_account(a2);
+    printf("\n"); //print new line
+    return 0;
+}
