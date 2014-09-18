@@ -1,0 +1,185 @@
+//
+//  Assignment2.c
+//  Assignment2_StandardDeviation
+//
+//  Created by Kquane Ingram on 8/31/14.
+//  Copyright (c) 2014 KING. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <math.h>
+
+int* get_grades (int* num);
+
+float calculate_average (int grades[], int num_grades);
+float calculate_Variance(int grades[], int num_grades, float avg);
+float calculate_StandardDeviation(float variance);
+
+void get_Median(int sortedArray[], int num_grades);
+
+void bubbleSort(int grades[], int num_grades);
+void display_Median(int m);
+void display_average (float avg);
+void display_Variance(float variance);
+void display_StandardDeviation(float standardDeviation);
+
+int main ()
+{
+    int num_grades; // Variable holding the number of grades intered by the user.
+    int* grades = get_grades (&num_grades);
+    if (num_grades == 0)
+        printf ("no grades\n");
+    else
+    {
+        int sortedArray [num_grades];
+        float avg = calculate_average (grades, num_grades);
+        float variance = calculate_Variance(grades, num_grades, avg);
+        float standardDeviation = calculate_StandardDeviation(variance);
+        get_Median(sortedArray, num_grades);
+        display_average (avg);
+        display_Variance(variance);
+        display_StandardDeviation(standardDeviation);
+        
+    }
+    return 0;
+}
+
+int* get_grades (int* num)
+{
+    assert (num != NULL);
+    int* grades = malloc (10 * sizeof (int));
+    if (grades == NULL)
+    {
+        printf ("out of resources - terminating\n");
+        exit(0);
+    }
+    else
+    {
+        int size = 10;
+        *num = 0;
+        int grade;
+        printf ("enter a grade - negative to terminate: ");
+        scanf ("%d", &grade);
+        while (grade >= 0 & grade != (-0))
+	   
+	   /********************************************
+	   I do not know what you are saying here.
+	   */
+        {
+            if (*num == size)
+            {
+                int* temp = malloc ((2 * size) * sizeof (int));
+                int i;
+                for (i = 0; i < size; i++)
+                    temp[i] = grades[i];
+                free (grades);
+                grades = temp;
+                size *= 2;
+            }
+            grades[*num] = grade;
+            (*num)++;
+            printf ("enter a grade - negative to terminate: ");
+            scanf ("%d", &grade);
+        }
+    }
+    assert (grades != NULL);
+    return grades;
+}
+
+float calculate_average (int grades[], int num_grades)
+{
+    // Function to calculate the average.
+    assert (num_grades > 0);
+    assert(grades !=NULL);
+    int sum = 0;
+    int i;
+    for (i = 0; i < num_grades; i++)
+        sum += grades[i];
+    bubbleSort(grades, num_grades); //set sorted array
+    return (float)sum/num_grades;
+}
+
+float calculate_Variance(int grades[], int num_grades, float avg)
+{
+    // This function calculates the Variance to be used in determining the Standard Deviation.
+    // To calculate the Variance, take each difference (Grade minus average), square it, and then average the result.
+    
+    assert(avg >= 0);
+    assert(grades !=NULL);
+    assert (num_grades > 0);
+    
+    float difference;
+    int i;
+    for (i = 0; i < num_grades; i++)
+    {
+        difference += powf((float)(grades[i] - avg), 2.0);
+    }
+    return (float)difference/num_grades;
+}
+
+float calculate_StandardDeviation(float variance)
+{
+    // Function to calculate the Standard Deviation.
+    // To calculate the Standard Deviation we square root the Variance;
+    assert(variance >=0);
+    return sqrtf(variance);
+}
+
+void bubbleSort(int grades[], int num_grades){
+    int k, d, temp;
+    for (k = 0; k < num_grades; k++)
+    {
+        for (d = 0; d < (num_grades - k - 1); d++)
+        {
+            if (grades[d] > grades[d + 1])
+            {
+                temp = grades[d];
+                grades[d] = grades[d + 1];
+                grades[d + 1] = temp;
+            }
+        }
+    }
+    get_Median(grades, num_grades);
+}
+
+void get_Median(int sortedArray[], int n )
+{
+    if (n%2==1) { /* if there is an odd number of elements I want n/2 - 1 */
+        
+        int Median = sortedArray[n / 2];
+         display_Median(Median);
+    }
+    else
+    {
+        int median = sortedArray [((n/2 -1) + n/2)/2];
+        display_Median(median);
+    }
+}
+
+void display_Median (int m)
+{
+     printf ("The Median is: %i\n", m);
+}
+
+void display_average (float avg)
+{
+    // Function to display the average grade to the console.
+    assert (avg >= 0);
+    printf ("The Average is: %f\n", avg);
+}
+
+void display_Variance(float variance)
+{
+    // Function to display the Variance to the console.
+    assert(variance >=0);
+    printf("The Variance is: %f\n", variance);
+}
+
+void display_StandardDeviation(float standardDeviation)
+{
+    // Function to display the Standard Deviation of the grades to the console.
+    assert(standardDeviation >=0);
+    printf("The Standard Deviation is: %f\n", standardDeviation);
+}
