@@ -1,0 +1,121 @@
+/*
+ Kquane Ingram
+ Date: 9/14/14
+ */
+
+#include "bankaccount.h"
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
+#include <ctype.h>
+
+int all_digits(char* a)
+{
+    // Method used for getting all digits
+    assert (a!=NULL);
+    
+    int i=0;
+    while(i<strlen(a) && isdigit (a[i]))
+    i++;
+    
+    return i==strlen(a);
+}
+
+int is_valid_ownerName (char* ownerName)
+{
+    //Method to check if ownerName is valid
+    return name != NULL && strlen (ownerName) > 0;
+}
+
+int is_valid_accountNumber (char* accountNum)
+{
+    //Method to check if AccountNumber is valid
+	return accountNum != NULL && strlen (accountNum) > 0 && all_digits(accountNum);
+}
+
+int is_valid_currentBalance(double bal)
+{
+    //Method to check if Balance is valid
+  return bal >= 0;
+}
+
+bankaccount* create_account (char* ownerName, char* accountNum, double bal)
+{
+	bankaccount* a = NULL;
+    
+	if(is_valid_ownerName (ownerName) && is_valid_accountNumber (accountNum) && is_valid_currentBalance (bal))
+	{
+        a = malloc (sizeof (bankaccount));
+		a -> owner = malloc ((strlen (ownerName) + 1) * sizeof(char));
+		strcpy (a -> owner, ownerName);
+		a -> accountNumber = malloc ((strlen (accountNum) + 1) * sizeof(char));
+		strcpy (a -> accountNumber, accountNum);
+		a -> balance = bal;
+	}
+    else
+    {
+        //return NULL if any input is not valid
+        return NULL;
+    }
+    return a;
+}
+
+void display_account (bankaccount* a)
+{
+    assert(a !=NULL);  //assertion used to verify pointer to the bank account is not NULL
+
+    printf ("Name of Account Owner: %s\n", a -> owner);
+    printf ("Tne Account Number is: %s\n", a -> accountNumber);
+    printf ("The balance is: %g\n", a -> balance);
+}
+
+int withdraw (bankaccount* a, double withdrawAmount)
+{
+    /* pointer to bank account (cannot be NULL).
+       assertion used to verify pointer to the bank account is not NULL
+     */
+    assert (a!=NULL);
+    
+    if( 0 <= withdrawAmount && withdrawAmount <= (a -> balance))
+    {
+        a->balance =(double)(a->balance -withdrawAmount);
+    }
+    else
+    {
+        return 0;
+    }
+    return  a->balance;
+}
+
+int deposit (bankaccount* a, double depositAmount)
+{
+    assert (a!=NULL);
+    
+    if( depositAmount >= 0)
+    {
+        a->balance =(double)(a->balance + depositAmount);
+    }
+    else
+    {
+        return 0;
+    }
+    return depositAmount > 0;
+}
+
+void delete_account (bankaccount* a) 
+{
+    assert (a!=NULL);
+    
+    if (a != NULL)
+    {
+      if (a -> owner != NULL){
+          free (a -> owner);
+      }
+      
+      if (a -> accountNumber != NULL){
+          free (a -> accountNumber);
+      }
+      free(a);
+    }
+}
