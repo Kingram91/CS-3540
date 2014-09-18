@@ -1,0 +1,9 @@
+//  Created by Kquane Ingram on 8/20/14.
+
+#include <stdio.h>
+
+int main() {
+    // insert code here...
+    printf("Hello, Yall!\n");
+    return 0;
+}
